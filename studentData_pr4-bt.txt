@@ -1,0 +1,38 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+contract student_management {
+    struct Student {
+        int stu_id;
+        string name;
+        string department;
+    }
+
+    Student[] public students;
+
+    event StuAdded(int stu_id, string name, string department);
+
+    function add_stud(int stu_id, string memory name, string memory department) public {
+        Student memory stud = Student(stu_id, name, department);
+        students.push(stud);
+        emit StuAdded(stu_id, name, department);
+    }
+
+    function get_stud(int stu_id) public view returns (string memory, string memory) {
+        for (uint i = 0; i < students.length; i++) {
+            Student memory stud = students[i];
+            if (stud.stu_id == stu_id) {
+                return (stud.name, stud.department);
+            }
+        }
+        return ("not found", "not found");
+    }
+
+    receive() external payable {
+        // accept Ether
+    }
+
+    fallback() external payable {
+        // we accept unknown calls or plain transfers with data
+    }
+}
